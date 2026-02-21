@@ -11,27 +11,27 @@ npm install @systemoperator/slug
 ## Usage
 
 ```typescript
-import { generateShortSlug, generateSlug, buildFullSlug, transliterate } from '@systemoperator/slug';
+import { slugify, transliterate } from '@systemoperator/slug';
 
-generateShortSlug('My Document.pdf')        // 'my-document'
-generateShortSlug('S2E6 Episode Title')      // 's2e6-episode-title'
-generateShortSlug('Привіт світ.doc')         // 'pryvit-svit'
-generateShortSlug('IMG_1234.jpg')            // 'img-1234'
-generateShortSlug('app-v1.2.3-beta.zip')     // 'app-v1_2_3-beta'
-generateShortSlug('📁 My Documents.zip')     // 'my-documents'
+slugify('My Document.pdf')        // 'my-document'
+slugify('S2E6 Episode Title')     // 's2e6-episode-title'
+slugify('Привіт світ.doc')        // 'pryvit-svit'
+slugify('IMG_1234.jpg')           // 'img-1234'
+slugify('Brøndby IF')             // 'brondby-if'
+slugify('📁 My Documents.zip')    // 'my-documents'
 
-generateSlug('Brøndby IF')                   // 'brondby-if'
-generateSlug('Fußball')                      // 'fussball'
+// preserve file extension
+slugify('report.pdf', { preserveExtension: true })  // 'report.pdf'
 
-buildFullSlug('/documents', 'report')        // '/documents/report'
-buildFullSlug(null, 'report')                // '/report'
+// separate numbers from letters
+slugify('hello2world', { separateNumbers: true })    // 'hello-2-world'
 
-transliterate('Привіт')                     // 'Pryvit'
+transliterate('Привіт')           // 'Pryvit'
 ```
 
 ## Features
 
-- strips file extensions (.pdf, .jpg, .docx, etc.)
+- strips file extensions by default (optional preserveExtension)
 - Ukrainian Cyrillic transliteration (official standard)
 - Nordic/European characters (ø, æ, ð, þ, ł, ß, œ)
 - emoji removal
@@ -42,11 +42,9 @@ transliterate('Привіт')                     // 'Pryvit'
 
 ## API
 
-- `generateShortSlug(text: string, options?: SlugOptions): string` - main slug generator, handles filenames, Cyrillic, emoji, UUIDs
-- `generateSlug(text: string): string` - simpler alternative for basic text
-- `buildFullSlug(parentSlug: string | null, shortSlug: string): string` - compose slug paths
+- `slugify(text: string, options?: SlugOptions): string` - generate URL-safe slug from text or filename
 - `transliterate(text: string): string` - Ukrainian/Nordic/European character mapping
-- `SlugOptions` - `{ separateNumbers?: boolean }` - insert dashes between letters and numbers
+- `SlugOptions` - `{ preserveExtension?: boolean, separateNumbers?: boolean }`
 
 ## License
 
